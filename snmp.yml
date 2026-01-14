@@ -1,0 +1,26 @@
+auths:
+  storedsafe_v3:
+    version: 3
+    security_level: authPriv
+    username: "snmpv3user"
+    auth_protocol: SHA
+    password: "auth-password"
+    priv_protocol: AES
+    priv_password: "encryption-password"
+
+modules:
+  storedsafe_extend:
+    walk:
+      - 1.3.6.1.4.1.8072.1.3.2.4.1.2.7.109.101.116.114.105.99.115
+    metrics:
+      - name: storedsafe_extend_line
+        oid: 1.3.6.1.4.1.8072.1.3.2.4.1.2.7.109.101.116.114.105.99.115
+        type: DisplayString
+        help: "StoredSafe metrics from NET-SNMP-EXTEND-MIB extend token 'metrics' (one line per index)."
+        indexes:
+          - labelname: line
+            type: Integer32
+        regex_extracts:
+          "":
+            - regex: '^[^ ]+ ([0-9.]+)$'
+              value: '$1'

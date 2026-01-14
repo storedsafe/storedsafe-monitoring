@@ -1,0 +1,296 @@
+# StoredSafe Monitoring – Prometheus Alerts
+#
+# Copyright (C) StoredSafe AB
+#
+# This file is licensed under the GNU Affero General Public License v3.0 (AGPL-3.0).
+# This file is provided as a reference example and is distributed without warranty.
+#
+# See the LICENSE file in the repository root for full license text.
+
+groups:
+  - name: storedsafe_alerts
+    interval: 30s
+    rules:
+
+      # --- Overall health ---
+      - alert: StoredSafeNotOK
+        expr: storedsafe_ok == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "StoredSafe health is CRITICAL"
+          description: "storedsafe_ok is 0 on {{ $labels.instance }}. Immediate attention is required."
+
+      # --- Audit freshness ---
+      - alert: StoredSafeAuditStaleWarning
+        expr: storedsafe_audit_stale_seconds > 600
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Audit data is stale"
+          description: "Audit status has not been refreshed for {{ $value }} seconds (>600s) on {{ $labels.instance }}."
+
+      - alert: StoredSafeAuditStaleCritical
+        expr: storedsafe_audit_stale_seconds > 1800
+        for: 10m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Audit data is critically stale"
+          description: "Audit status has not been refreshed for {{ $value }} seconds (>1800s) on {{ $labels.instance }}."
+
+      # --- Database ---
+      - alert: StoredSafeDatabaseNotOK
+        expr: storedsafe_db_ok == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Database check failed"
+          description: "Database health check failed (db_ok=0) on {{ $labels.instance }}."
+
+      - alert: StoredSafeDatabaseSlow
+        expr: storedsafe_db_latency_milliseconds > 200
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Database latency elevated"
+          description: "Database latency is {{ $value }} ms (>200ms) on {{ $labels.instance }}."
+
+      # --- Storage health ---
+      - alert: StoredSafeRaidNotOK
+        expr: storedsafe_raid_ok == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "RAID not OK"
+          description: "RAID health is not OK (raid_ok=0) on {{ $labels.instance }}."
+
+      - alert: StoredSafeDrivesDegradedOrFailed
+        expr: (storedsafe_failed_drives > 0) or (storedsafe_degraded_drives > 0) or (storedsafe_critical_drives > 0)
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Drive health issue detected"
+          description: "One or more drives are failed/degraded/critical on {{ $labels.instance }}."
+
+      # --- Disk space ---
+      - alert: StoredSafeDiskFreeLow
+        expr: storedsafe_disk_free_percent < 10
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Low disk free space"
+          description: "Disk free space is {{ $value }}% (<10%) on {{ $labels.instance }}."
+
+      # --- Backup: completed ---
+      - alert: StoredSafeBackupCompletedError
+        expr: storedsafe_backup_completed_error == 1
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Backup completed status reports ERROR"
+          description: "backup_completed_error=1 on {{ $labels.instance }}."
+
+      - alert: StoredSafeBackupCompletedMissing
+        expr: storedsafe_backup_completed_missing == 1
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Backup completed status is missing"
+          description: "backup_completed_missing=1 on {{ $labels.instance }}."
+
+      - alert: StoredSafeBackupCompletedStale
+        expr: storedsafe_backup_completed_stale == 1
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Backup completed status is stale"
+          description: "backup_completed_stale=1 on {{ $labels.instance }}."
+
+      # --- Backup: transfer ---
+      - alert: StoredSafeBackupTransferNotOK
+        expr: storedsafe_backup_transfer_ok == 0
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Backup transfer not OK"
+          description: "backup_transfer_ok=0 on {{ $labels.instance }}."
+
+      - alert: StoredSafeBackupTransferError
+        expr: storedsafe_backup_transfer_error == 1
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Backup transfer reports ERROR"
+          description: "backup_transfer_error=1 on {{ $labels.instance }}."
+
+      - alert: StoredSafeBackupTransferMissing
+        expr: storedsafe_backup_transfer_missing == 1
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Backup transfer status is missing"
+          description: "backup_transfer_missing=1 on {{ $labels.instance }}."
+
+      - alert: StoredSafeBackupTransferStale
+        expr: storedsafe_backup_transfer_stale == 1
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Backup transfer status is stale"
+          description: "backup_transfer_stale=1 on {{ $labels.instance }}."
+
+      # --- Policy / compliance ---
+      - alert: StoredSafePolicyViolations
+        expr: storedsafe_policy_violations == 1
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Policy violations detected"
+          description: "policy_violations=1 on {{ $labels.instance }}."
+
+      # NOTE: Warnings are useful but can be noisy. Keep as warning, no info.
+      - alert: StoredSafePolicyWarnings
+        expr: storedsafe_policy_warnings == 1
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Policy warnings detected"
+          description: "policy_warnings=1 on {{ $labels.instance }}."
+
+      - alert: StoredSafePolicyNoAuthWarnings
+        expr: storedsafe_policy_noauth_warnings == 1
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Policy no-auth warnings detected"
+          description: "policy_noauth_warnings=1 on {{ $labels.instance }}."
+
+      # --- CRL status ---
+      - alert: StoredSafeCRLFetchError
+        expr: storedsafe_crl_fetch_error == 1
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "CRL fetch error"
+          description: "crl_fetch_error=1 on {{ $labels.instance }}."
+
+      - alert: StoredSafeCRLInvalidSignature
+        expr: storedsafe_crl_invalid_signature == 1
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "CRL invalid signature"
+          description: "crl_invalid_signature=1 on {{ $labels.instance }}."
+
+      - alert: StoredSafeCRLExpired
+        expr: storedsafe_crl_expired == 1
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "CRL expired"
+          description: "crl_expired=1 on {{ $labels.instance }}."
+
+      # --- License capacity (users) ---
+      - alert: StoredSafeUserLicenseOverrun
+        expr: storedsafe_active_users > bool on(instance) storedsafe_licensed_users
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "User license capacity exceeded"
+          description: "active_users exceeds licensed_users on {{ $labels.instance }}."
+
+      # --- Feature licenses: expired flags ---
+      - alert: StoredSafeFileFeatureExpired
+        expr: storedsafe_file_expired == 1
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "FILE feature license expired"
+          description: "file_expired=1 on {{ $labels.instance }}."
+
+      - alert: StoredSafePasswordFeatureExpired
+        expr: storedsafe_password_expired == 1
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "PASSWORD feature license expired"
+          description: "password_expired=1 on {{ $labels.instance }}."
+
+      - alert: StoredSafeCertificateFeatureExpired
+        expr: storedsafe_certificate_expired == 1
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "CERTIFICATE feature license expired"
+          description: "certificate_expired=1 on {{ $labels.instance }}."
+
+      - alert: StoredSafe2FAFeatureExpired
+        expr: storedsafe_2fa_expired == 1
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "2FA feature license expired"
+          description: "2fa_expired=1 on {{ $labels.instance }}."
+
+      # --- Feature licenses: expiring soon (epoch > 0 means finite) ---
+      - alert: StoredSafeFileFeatureExpiringSoon
+        expr: storedsafe_file_expires_epoch > 0 and storedsafe_file_expires_epoch < (time() + 30*24*3600)
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "FILE feature license expiring within 30 days"
+          description: "FILE license expires within 30 days on {{ $labels.instance }}."
+
+      - alert: StoredSafePasswordFeatureExpiringSoon
+        expr: storedsafe_password_expires_epoch > 0 and storedsafe_password_expires_epoch < (time() + 30*24*3600)
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "PASSWORD feature license expiring within 30 days"
+          description: "PASSWORD license expires within 30 days on {{ $labels.instance }}."
+
+      - alert: StoredSafeCertificateFeatureExpiringSoon
+        expr: storedsafe_certificate_expires_epoch > 0 and storedsafe_certificate_expires_epoch < (time() + 30*24*3600)
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "CERTIFICATE feature license expiring within 30 days"
+          description: "CERTIFICATE license expires within 30 days on {{ $labels.instance }}."
+
+      - alert: StoredSafe2FAFeatureExpiringSoon
+        expr: storedsafe_2fa_expires_epoch > 0 and storedsafe_2fa_expires_epoch < (time() + 30*24*3600)
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "2FA feature license expiring within 30 days"
+          description: "2FA license expires within 30 days on {{ $labels.instance }}."

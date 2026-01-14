@@ -1,0 +1,284 @@
+# StoredSafe Monitoring – Prometheus Alerts
+#
+# Copyright (C) StoredSafe AB
+#
+# This file is licensed under the GNU Affero General Public License v3.0 (AGPL-3.0).
+# This file is provided as a reference example and is distributed without warranty.
+#
+# See the LICENSE file in the repository root for full license text.
+
+groups:
+  - name: storedsafe_core
+    rules:
+      - record: storedsafe_metrics_schema
+        expr: storedsafe_extend_line{line="1"}
+
+      - record: storedsafe_ok
+        expr: storedsafe_extend_line{line="77"}
+
+      - record: storedsafe_uptime_seconds
+        expr: storedsafe_extend_line{line="2"}
+
+      - record: storedsafe_cpu_count
+        expr: storedsafe_extend_line{line="3"}
+
+      - record: storedsafe_cpu_util_percent
+        expr: storedsafe_extend_line{line="4"}
+
+      - record: storedsafe_cpu_load1
+        expr: storedsafe_extend_line{line="5"}
+
+      - record: storedsafe_physmem_total_bytes
+        expr: storedsafe_extend_line{line="6"}
+
+      - record: storedsafe_mem_used_percent
+        expr: storedsafe_extend_line{line="7"}
+
+
+  - name: storedsafe_disk
+    rules:
+      - record: storedsafe_disk_free_bytes
+        expr: storedsafe_extend_line{line="8"}
+
+      - record: storedsafe_disk_free_percent
+        expr: storedsafe_extend_line{line="9"}
+
+      - record: storedsafe_disk_used_bytes
+        expr: storedsafe_extend_line{line="10"}
+
+      - record: storedsafe_disk_used_percent
+        expr: storedsafe_extend_line{line="11"}
+
+      - record: storedsafe_disk_total_bytes
+        expr: storedsafe_extend_line{line="12"}
+
+
+  - name: storedsafe_storage_health
+    rules:
+      - record: storedsafe_raid_ok
+        expr: storedsafe_extend_line{line="13"}
+
+      - record: storedsafe_critical_drives
+        expr: storedsafe_extend_line{line="14"}
+
+      - record: storedsafe_failed_drives
+        expr: storedsafe_extend_line{line="15"}
+
+      - record: storedsafe_degraded_drives
+        expr: storedsafe_extend_line{line="16"}
+
+
+  - name: storedsafe_audit
+    rules:
+      - record: storedsafe_audit_last_update_epoch
+        expr: storedsafe_extend_line{line="17"}
+
+      - record: storedsafe_audit_stale_seconds
+        expr: storedsafe_extend_line{line="18"}
+
+
+  - name: storedsafe_database
+    rules:
+      - record: storedsafe_db_ok
+        expr: storedsafe_extend_line{line="19"}
+
+      - record: storedsafe_db_latency_milliseconds
+        expr: storedsafe_extend_line{line="20"}
+
+
+  - name: storedsafe_backup_completed
+    rules:
+      - record: storedsafe_backup_completed_ok
+        expr: storedsafe_extend_line{line="21"}
+
+      - record: storedsafe_backup_completed_last_ok_epoch
+        expr: storedsafe_extend_line{line="22"}
+
+      - record: storedsafe_backup_completed_age_seconds
+        expr: storedsafe_extend_line{line="23"}
+
+      - record: storedsafe_backup_completed_stale
+        expr: storedsafe_extend_line{line="24"}
+
+      - record: storedsafe_backup_completed_error
+        expr: storedsafe_extend_line{line="25"}
+
+      - record: storedsafe_backup_completed_missing
+        expr: storedsafe_extend_line{line="26"}
+
+
+  - name: storedsafe_backup_transfer
+    rules:
+      - record: storedsafe_backup_transfer_ok
+        expr: storedsafe_extend_line{line="27"}
+
+      - record: storedsafe_backup_transfer_last_ok_epoch
+        expr: storedsafe_extend_line{line="28"}
+
+      - record: storedsafe_backup_transfer_age_seconds
+        expr: storedsafe_extend_line{line="29"}
+
+      - record: storedsafe_backup_transfer_stale
+        expr: storedsafe_extend_line{line="30"}
+
+      - record: storedsafe_backup_transfer_error
+        expr: storedsafe_extend_line{line="31"}
+
+      - record: storedsafe_backup_transfer_missing
+        expr: storedsafe_extend_line{line="32"}
+
+      - record: storedsafe_backup_occupies_bytes
+        expr: storedsafe_extend_line{line="33"}
+
+
+  - name: storedsafe_policy
+    rules:
+      - record: storedsafe_policy_violations
+        expr: storedsafe_extend_line{line="34"}
+
+      - record: storedsafe_policy_violations_total
+        expr: storedsafe_extend_line{line="35"}
+
+      - record: storedsafe_policy_warnings
+        expr: storedsafe_extend_line{line="36"}
+
+      - record: storedsafe_policy_warnings_total
+        expr: storedsafe_extend_line{line="37"}
+
+      - record: storedsafe_policy_noauth_warnings
+        expr: storedsafe_extend_line{line="38"}
+
+      - record: storedsafe_policy_noauth_warnings_total
+        expr: storedsafe_extend_line{line="39"}
+
+
+  - name: storedsafe_crl
+    rules:
+      - record: storedsafe_crl_fetch_error
+        expr: storedsafe_extend_line{line="40"}
+
+      - record: storedsafe_crl_invalid_file
+        expr: storedsafe_extend_line{line="41"}
+
+      - record: storedsafe_crl_invalid_signature
+        expr: storedsafe_extend_line{line="42"}
+
+      - record: storedsafe_crl_expired
+        expr: storedsafe_extend_line{line="43"}
+
+
+  - name: storedsafe_stats_7d
+    rules:
+      - record: storedsafe_stats7d_auth_failure
+        expr: storedsafe_extend_line{line="44"}
+
+      - record: storedsafe_stats7d_weak_passphrase
+        expr: storedsafe_extend_line{line="45"}
+
+      - record: storedsafe_stats7d_login
+        expr: storedsafe_extend_line{line="46"}
+
+      - record: storedsafe_stats7d_decrypt
+        expr: storedsafe_extend_line{line="47"}
+
+      - record: storedsafe_stats7d_vaults_deleted
+        expr: storedsafe_extend_line{line="48"}
+
+      - record: storedsafe_stats7d_objects_deleted
+        expr: storedsafe_extend_line{line="49"}
+
+      - record: storedsafe_stats7d_vaults_created
+        expr: storedsafe_extend_line{line="50"}
+
+      - record: storedsafe_stats7d_objects_created
+        expr: storedsafe_extend_line{line="51"}
+
+
+  - name: storedsafe_objects
+    rules:
+      - record: storedsafe_active_users
+        expr: storedsafe_extend_line{line="52"}
+
+      - record: storedsafe_deactivated_users
+        expr: storedsafe_extend_line{line="53"}
+
+      - record: storedsafe_licensed_users
+        expr: storedsafe_extend_line{line="54"}
+
+      - record: storedsafe_active_vaults
+        expr: storedsafe_extend_line{line="55"}
+
+      - record: storedsafe_active_objects
+        expr: storedsafe_extend_line{line="56"}
+
+      - record: storedsafe_deleted_vaults_total
+        expr: storedsafe_extend_line{line="57"}
+
+      - record: storedsafe_deleted_objects_total
+        expr: storedsafe_extend_line{line="58"}
+
+      # Derived helper for your Grafana color logic / alerting
+      - record: storedsafe_license_overrun
+        expr: storedsafe_active_users > bool on(instance) storedsafe_licensed_users
+
+
+  - name: storedsafe_feature_licenses
+    rules:
+      - record: storedsafe_password_licensed
+        expr: storedsafe_extend_line{line="59"}
+
+      - record: storedsafe_file_licensed
+        expr: storedsafe_extend_line{line="60"}
+
+      - record: storedsafe_certificate_licensed
+        expr: storedsafe_extend_line{line="61"}
+
+      - record: storedsafe_2fa_licensed
+        expr: storedsafe_extend_line{line="62"}
+
+      # Epoch (0 means Infinite/Never/Unknown)
+      - record: storedsafe_password_expires_epoch
+        expr: storedsafe_extend_line{line="63"}
+
+      - record: storedsafe_file_expires_epoch
+        expr: storedsafe_extend_line{line="64"}
+
+      - record: storedsafe_certificate_expires_epoch
+        expr: storedsafe_extend_line{line="65"}
+
+      - record: storedsafe_2fa_expires_epoch
+        expr: storedsafe_extend_line{line="66"}
+
+      # Expired flags (0/1)
+      - record: storedsafe_password_expired
+        expr: storedsafe_extend_line{line="67"}
+
+      - record: storedsafe_file_expired
+        expr: storedsafe_extend_line{line="68"}
+
+      - record: storedsafe_certificate_expired
+        expr: storedsafe_extend_line{line="69"}
+
+      - record: storedsafe_2fa_expired
+        expr: storedsafe_extend_line{line="70"}
+
+
+  - name: storedsafe_version
+    rules:
+      - record: storedsafe_version_major
+        expr: storedsafe_extend_line{line="71"}
+
+      - record: storedsafe_version_minor
+        expr: storedsafe_extend_line{line="72"}
+
+      - record: storedsafe_version_patch
+        expr: storedsafe_extend_line{line="73"}
+
+      - record: storedsafe_version_build
+        expr: storedsafe_extend_line{line="74"}
+
+      - record: storedsafe_version_full
+        expr: storedsafe_extend_line{line="75"}
+
+      # Intentionally ignored: line 76 (version_info string)
+      # Prometheus can't use it meaningfully; keep it for SNMP tooling/humans.
