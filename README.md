@@ -78,15 +78,17 @@ cd storedsafe-monitoring
 
 2. Configure SNMPv3 credentials in the StoredSafe management console.
 
-3. Update `snmp.yml` with your SNMPv3 credentials.
+3. Update `prometheus.yml` with the IP-adress or hostname of your StoredSafe instance.
 
-4. Start the stack:
+4. Update `snmp.yml` with your SNMPv3 credentials.
+
+5. Start the stack:
 
 ```bash
 docker-compose up -d
 ```
 
-5. Open Grafana (default):
+6. Open Grafana (default):
 
 ```bash
 http://localhost:3000
