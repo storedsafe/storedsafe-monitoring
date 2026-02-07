@@ -103,7 +103,7 @@
         "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
-            "last"
+            "lastNotNull"
           ],
           "fields": "",
           "values": false
@@ -120,9 +120,11 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "builder",
+          "exemplar": false,
           "expr": "storedsafe_ok",
+          "instant": true,
           "legendFormat": "__auto",
-          "range": true,
+          "range": false,
           "refId": "A"
         }
       ],
@@ -147,7 +149,7 @@
                 "0": {
                   "color": "red",
                   "index": 1,
-                  "text": "ERROR"
+                  "text": "DEGRADED"
                 },
                 "1": {
                   "color": "green",
@@ -209,10 +211,12 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "editorMode": "builder",
+          "editorMode": "code",
+          "exemplar": false,
           "expr": "storedsafe_raid_ok",
+          "instant": true,
           "legendFormat": "__auto",
-          "range": true,
+          "range": false,
           "refId": "A"
         }
       ],
@@ -257,7 +261,11 @@
               },
               {
                 "color": "red",
-                "value": 80
+                "value": 0
+              },
+              {
+                "color": "green",
+                "value": 1
               }
             ]
           }
@@ -295,10 +303,12 @@
             "type": "prometheus",
             "uid": "PBFA97CFB590B2093"
           },
-          "editorMode": "builder",
+          "editorMode": "code",
+          "exemplar": false,
           "expr": "storedsafe_backup_completed_ok",
+          "instant": true,
           "legendFormat": "__auto",
-          "range": true,
+          "range": false,
           "refId": "A"
         }
       ],
@@ -313,8 +323,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "fixedColor": "green",
-            "mode": "fixed"
+            "mode": "thresholds"
           },
           "decimals": 0,
           "displayName": "DB latency",
@@ -327,8 +336,12 @@
                 "value": 0
               },
               {
+                "color": "#EAB839",
+                "value": 50
+              },
+              {
                 "color": "red",
-                "value": 80
+                "value": 200
               }
             ]
           },
@@ -397,10 +410,6 @@
               {
                 "color": "green",
                 "value": 0
-              },
-              {
-                "color": "green",
-                "value": 1
               },
               {
                 "color": "red",
@@ -637,16 +646,37 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "storedsafe_active_users > bool on(instance) storedsafe_licensed_users",
-          "hide": true,
-          "instant": false,
+          "exemplar": false,
+          "expr": "storedsafe_active_users > bool on(instance) (storedsafe_licensed_users)",
+          "hide": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "license_overrun",
-          "range": true,
+          "range": false,
           "refId": "B"
         }
       ],
       "title": "User license capacity",
+      "transformations": [
+        {
+          "id": "configFromData",
+          "options": {
+            "configRefId": "B",
+            "mappings": [
+              {
+                "fieldName": "license_overrun",
+                "handlerArguments": {
+                  "threshold": {
+                    "color": "orange"
+                  }
+                },
+                "handlerKey": "threshold1",
+                "reducerId": "logmin"
+              }
+            ]
+          }
+        }
+      ],
       "type": "stat"
     },
     {
@@ -1441,7 +1471,7 @@
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
       },
-      "description": "Installed StoredSafe software version running on this system.",
+      "description": "Installed StoredSafe software version running on this system.\nXYZBUILD == vX.Y.Z build-BUILD",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1454,10 +1484,6 @@
               {
                 "color": "green",
                 "value": 0
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           }
@@ -1485,7 +1511,7 @@
           "values": false
         },
         "showPercentChange": false,
-        "textMode": "value",
+        "textMode": "auto",
         "wideLayout": true
       },
       "pluginVersion": "12.3.2",
@@ -1496,11 +1522,13 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "builder",
+          "exemplar": false,
           "expr": "storedsafe_version_major",
           "hide": true,
+          "instant": true,
           "interval": "",
           "legendFormat": "Major",
-          "range": true,
+          "range": false,
           "refId": "A"
         },
         {
