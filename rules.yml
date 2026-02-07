@@ -14,7 +14,7 @@ groups:
         expr: storedsafe_extend_line{line="1"}
 
       - record: storedsafe_ok
-        expr: storedsafe_extend_line{line="77"}
+        expr: storedsafe_extend_line{line="78"}
 
       - record: storedsafe_uptime_seconds
         expr: storedsafe_extend_line{line="2"}
@@ -193,29 +193,32 @@ groups:
       - record: storedsafe_stats7d_objects_created
         expr: storedsafe_extend_line{line="51"}
 
+      - record: storedsafe_stats7d_objects_violates_policy
+        expr: storedsafe_extend_line{line="52"}
+
 
   - name: storedsafe_objects
     rules:
       - record: storedsafe_active_users
-        expr: storedsafe_extend_line{line="52"}
-
-      - record: storedsafe_deactivated_users
         expr: storedsafe_extend_line{line="53"}
 
-      - record: storedsafe_licensed_users
+      - record: storedsafe_deactivated_users
         expr: storedsafe_extend_line{line="54"}
 
-      - record: storedsafe_active_vaults
+      - record: storedsafe_licensed_users
         expr: storedsafe_extend_line{line="55"}
 
-      - record: storedsafe_active_objects
+      - record: storedsafe_active_vaults
         expr: storedsafe_extend_line{line="56"}
 
-      - record: storedsafe_deleted_vaults_total
+      - record: storedsafe_active_objects
         expr: storedsafe_extend_line{line="57"}
 
-      - record: storedsafe_deleted_objects_total
+      - record: storedsafe_deleted_vaults_total
         expr: storedsafe_extend_line{line="58"}
+
+      - record: storedsafe_deleted_objects_total
+        expr: storedsafe_extend_line{line="59"}
 
       # Derived helper for your Grafana color logic / alerting
       - record: storedsafe_license_overrun
@@ -225,60 +228,60 @@ groups:
   - name: storedsafe_feature_licenses
     rules:
       - record: storedsafe_password_licensed
-        expr: storedsafe_extend_line{line="59"}
-
-      - record: storedsafe_file_licensed
         expr: storedsafe_extend_line{line="60"}
 
-      - record: storedsafe_certificate_licensed
+      - record: storedsafe_file_licensed
         expr: storedsafe_extend_line{line="61"}
 
-      - record: storedsafe_2fa_licensed
+      - record: storedsafe_certificate_licensed
         expr: storedsafe_extend_line{line="62"}
+
+      - record: storedsafe_2fa_licensed
+        expr: storedsafe_extend_line{line="63"}
 
       # Epoch (0 means Infinite/Never/Unknown)
       - record: storedsafe_password_expires_epoch
-        expr: storedsafe_extend_line{line="63"}
-
-      - record: storedsafe_file_expires_epoch
         expr: storedsafe_extend_line{line="64"}
 
-      - record: storedsafe_certificate_expires_epoch
+      - record: storedsafe_file_expires_epoch
         expr: storedsafe_extend_line{line="65"}
 
-      - record: storedsafe_2fa_expires_epoch
+      - record: storedsafe_certificate_expires_epoch
         expr: storedsafe_extend_line{line="66"}
+
+      - record: storedsafe_2fa_expires_epoch
+        expr: storedsafe_extend_line{line="67"}
 
       # Expired flags (0/1)
       - record: storedsafe_password_expired
-        expr: storedsafe_extend_line{line="67"}
-
-      - record: storedsafe_file_expired
         expr: storedsafe_extend_line{line="68"}
 
-      - record: storedsafe_certificate_expired
+      - record: storedsafe_file_expired
         expr: storedsafe_extend_line{line="69"}
 
-      - record: storedsafe_2fa_expired
+      - record: storedsafe_certificate_expired
         expr: storedsafe_extend_line{line="70"}
+
+      - record: storedsafe_2fa_expired
+        expr: storedsafe_extend_line{line="71"}
 
 
   - name: storedsafe_version
     rules:
       - record: storedsafe_version_major
-        expr: storedsafe_extend_line{line="71"}
-
-      - record: storedsafe_version_minor
         expr: storedsafe_extend_line{line="72"}
 
-      - record: storedsafe_version_patch
+      - record: storedsafe_version_minor
         expr: storedsafe_extend_line{line="73"}
 
-      - record: storedsafe_version_build
+      - record: storedsafe_version_patch
         expr: storedsafe_extend_line{line="74"}
 
-      - record: storedsafe_version_full
+      - record: storedsafe_version_build
         expr: storedsafe_extend_line{line="75"}
 
-      # Intentionally ignored: line 76 (version_info string)
+      - record: storedsafe_version_full
+        expr: storedsafe_extend_line{line="76"}
+
+      # Intentionally ignored: line 77 (version_info string)
       # Prometheus can't use it meaningfully; keep it for SNMP tooling/humans.
