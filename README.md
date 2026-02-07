@@ -1,5 +1,9 @@
 # StoredSafe Monitoring (Prometheus / Grafana)
 
+<p align="center">
+  <img src="docs/screenshots/storedsafe-dashboard.jpg" alt="StoredSafe overview" width="800">
+</p>
+
 This repository provides a **reference monitoring stack** for StoredSafe using
 **SNMPv3**, **Prometheus**, and **Grafana**.
 
