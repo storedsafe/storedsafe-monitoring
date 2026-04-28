@@ -47,7 +47,7 @@ stack.
 
 ## Requirements
 
-- StoredSafe **version 4.1.0 or later** (build 7120+)
+- StoredSafe **version 4.1.4 or later** (build 7120+)
 - **SNMPv3** access configured in the StoredSafe management console
 - SNMPv3 security level: **authPriv** (authentication + encryption)
 
@@ -97,6 +97,10 @@ docker-compose up -d
 ```bash
 http://localhost:3000
 ```
+
+> **Security note:** The default Grafana credentials in `docker-compose.yml` are
+> `admin` / `admin`. Change `GF_SECURITY_ADMIN_PASSWORD` before deploying to any
+> environment reachable outside localhost.
 
 ## Dashboards
 
